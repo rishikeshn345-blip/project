@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Response</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#07122a;color:#e6eef8;padding:28px}
+    .box{max-width:900px;margin:0 auto;background:#071a30;padding:18px;border-radius:10px}
+    pre{white-space:pre-wrap;background:#041028;padding:12px;border-radius:8px;color:#dff6ff}
+    button{margin-top:12px;padding:8px 12px;border-radius:8px;border:none;background:#7c5cff;color:#061126;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>AI Response</h2>
+    <pre id="out">Loading...</pre>
+    <button id="back">Back</button>
+  </div>
+
+  <script>
+    // read the saved response from localStorage and render
+    const out = document.getElementById('out');
+    const resp = localStorage.getItem('ai_response') || '';
+    out.textContent = resp || 'No response found.';
+    document.getElementById('back').addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>

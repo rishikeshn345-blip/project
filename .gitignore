@@ -1,0 +1,8 @@
+# Ignore client-side config that contains API keys
+config.js
+
+# Node modules (if you ever use Node for the server)
+node_modules/
+
+# Environment files
+.env

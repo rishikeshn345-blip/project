@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PDF + Prompt → AI</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#0b1220;color:#e6eef8;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
+    .card{background:#07122a;padding:24px;border-radius:12px;width:540px}
+    label{display:block;margin-bottom:6px}
+    textarea{width:100%;height:110px;padding:8px;border-radius:6px;border:1px solid #203040;background:#07122a;color:inherit}
+    input[type=file]{display:block}
+    button{margin-top:12px;padding:10px 14px;border-radius:8px;border:none;background:#7c5cff;color:#061126;font-weight:700;cursor:pointer}
+    .hint{color:#9aa4b2;font-size:13px;margin-top:8px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Ask about a PDF</h2>
+    <label for="prompt">Prompt</label>
+    <textarea id="prompt" placeholder="Enter your question or instruction for the PDF..."></textarea>
+
+    <label for="pdfFile">PDF file</label>
+    <input id="pdfFile" type="file" accept="application/pdf" />
+
+  <div class="hint">This demo extracts PDF text client-side using pdf.js and calls Google Generative Language directly from the browser (client-only mode).</div>
+
+    <button id="sendBtn">Send to AI</button>
+    <div id="status" class="hint"></div>
+  </div>
+
+  <!-- Create a local config.js (see config.example.js) which sets window.GOOGLE_API_KEY and optional window.MODEL -->
+  <script src="config.js"></script>
+  <script type="module" src="client.js"></script>
+</body>
+</html>
