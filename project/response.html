@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Response Page</title>
+    <link rel="stylesheet" href="result.css">
+    <style>
+        body {
+            background: #181818;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .response-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px 120px 20px;
+        }
+        .response-box {
+            background: #222;
+            border-radius: 8px;
+            padding: 32px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.4);
+            margin-bottom: 32px;
+        }
+        .bottom-bar {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background: #111;
+            padding: 24px 0 16px 0;
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+        }
+        textarea {
+            background: #222;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 6px;
+            padding: 12px;
+            width: 320px;
+            min-height: 60px;
+            resize: vertical;
+            font-size: 1rem;
+        }
+        input[type="file"] {
+            color: #fff;
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 6px;
+            padding: 8px;
+        }
+        label {
+            color: #ccc;
+            font-size: 1rem;
+        }
+        @media (max-width: 600px) {
+            .response-box {
+                padding: 16px;
+            }
+            .bottom-bar {
+                flex-direction: column;
+                gap: 12px;
+                padding: 16px 0 8px 0;
+            }
+            textarea {
+                width: 90vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="response-container">
+        <div class="response-box">
+            <h2>Response</h2>
+            <p id="response-text">Your response will be displayed here.</p>
+        </div>
+    
+</body>
+</html>
