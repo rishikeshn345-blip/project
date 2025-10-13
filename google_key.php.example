@@ -1,0 +1,10 @@
+<?php<?php
+
+// google_key.php.example// Copy this file to google_key.php and set your key
+
+// Copy this file to google_key.php and replace the placeholder with your real key.// IMPORTANT: Do NOT commit google_key.php to source control
+
+// Do NOT commit google_key.php to version control.$GOOGLE_API_KEY = 'REPLACE_WITH_YOUR_GOOGLE_API_KEY';
+
+
+$GOOGLE_API_KEY = 'YOUR_REAL_API_KEY_HERE';

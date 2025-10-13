@@ -36,50 +36,29 @@ function init() {
     if (!prompt) return (status.textContent = 'Please enter a prompt.');
 
       try {
-        // Client-only flow: call Google Generative Language API directly from browser
-        // NOTE: This requires config.js to define window.GOOGLE_API_KEY. This exposes the key to the browser.
-        if (!window.GOOGLE_API_KEY) throw new Error('Missing GOOGLE_API_KEY. Create config.js and add your key.');
+        // PHP server mode: send prompt+pdfText to server-side proxy which holds the API key
         sendBtn.disabled = true;
         sendBtn.textContent = 'Extracting...';
 
         const pdfText = await extractPdfText(file);
 
-        sendBtn.textContent = 'Calling API...';
+        sendBtn.textContent = 'Sending to server...';
 
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta2/${window.MODEL || 'models/text-bison-001'}:generate?key=${window.GOOGLE_API_KEY}`;
-        const body = {
-          prompt: { text: `PDF CONTENT:\n${pdfText}\n\nUSER PROMPT:\n${prompt}` },
-          temperature: 0.2,
-          maxOutputTokens: 800
-        };
-
-        const r = await fetch(endpoint, {
+        const res = await fetch('proxy.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body)
+          body: JSON.stringify({ prompt, pdfText })
         });
 
-        if (!r.ok) {
-          const txt = await r.text();
-          throw new Error('API error: ' + txt);
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error('Server error: ' + txt);
         }
 
-        const json = await r.json();
-        // try several response shapes
-        let aiText = '';
-        if (json?.candidates?.[0]?.output) aiText = json.candidates[0].output;
-        if (!aiText && Array.isArray(json?.output)) {
-          aiText = json.output.map(block => {
-            if (Array.isArray(block.content)) return block.content.map(c => c.text || c).join('');
-            return block.text || '';
-          }).join('\n');
-        }
-        if (!aiText && Array.isArray(json?.candidates)) {
-          const first = json.candidates[0];
-          if (first?.content && Array.isArray(first.content)) aiText = first.content.map(c=>c.text||'').join('');
-        }
+        const data = await res.json();
+        const aiText = data?.response || '';
 
-        localStorage.setItem('ai_response', aiText || '');
+        localStorage.setItem('ai_response', aiText);
         window.location.href = 'responce.html';
       } catch (err) {
         console.error(err);
