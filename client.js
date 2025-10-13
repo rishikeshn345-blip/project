@@ -36,49 +36,29 @@ function init() {
     if (!prompt) return (status.textContent = 'Please enter a prompt.');
 
       try {
-        if (!window.GOOGLE_API_KEY) throw new Error('Missing GOOGLE_API_KEY. Create config.js from config.example.js and add your key.');
+        // Use server-side PHP proxy to call Google Generative Language (safer, works with XAMPP)
         sendBtn.disabled = true;
         sendBtn.textContent = 'Extracting...';
 
         const pdfText = await extractPdfText(file);
 
-        sendBtn.textContent = 'Calling Gemini...';
+        sendBtn.textContent = 'Sending to server...';
 
-        // Call Google Generative Language directly from client (WARNING: exposing API key in browser)
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta2/${window.MODEL || 'models/text-bison-001'}:generate?key=${window.GOOGLE_API_KEY}`;
-        const body = {
-          prompt: { text: `PDF CONTENT:\n${pdfText}\n\nUSER PROMPT:\n${prompt}` },
-          temperature: 0.2,
-          maxOutputTokens: 800
-        };
-
-        const r = await fetch(endpoint, {
+        const res = await fetch('/proxy.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body)
+          body: JSON.stringify({ prompt, pdfText })
         });
 
-        if (!r.ok) {
-          const txt = await r.text();
-          throw new Error('API error: ' + txt);
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error('Server error: ' + txt);
         }
 
-        const json = await r.json();
-        // try several response shapes
-        let aiText = '';
-        if (json?.candidates?.[0]?.output) aiText = json.candidates[0].output;
-        if (!aiText && Array.isArray(json?.output)) {
-          aiText = json.output.map(block => {
-            if (Array.isArray(block.content)) return block.content.map(c => c.text || c).join('');
-            return block.text || '';
-          }).join('\n');
-        }
-        if (!aiText && Array.isArray(json?.candidates)) {
-          const first = json.candidates[0];
-          if (first?.content && Array.isArray(first.content)) aiText = first.content.map(c=>c.text||'').join('');
-        }
+        const data = await res.json();
+        const aiText = data?.response || '';
 
-        localStorage.setItem('ai_response', aiText || '');
+        localStorage.setItem('ai_response', aiText);
         window.location.href = 'responce.html';
       } catch (err) {
         console.error(err);

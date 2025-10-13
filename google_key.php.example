@@ -1,0 +1,4 @@
+<?php
+// Copy this file to google_key.php and set your key
+// IMPORTANT: Do NOT commit google_key.php to source control
+$GOOGLE_API_KEY = 'REPLACE_WITH_YOUR_GOOGLE_API_KEY';
